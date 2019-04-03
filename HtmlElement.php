@@ -1,26 +1,27 @@
 <?php
 
-class HtmlElement {
+class HtmlElement
+{
 
     /**
      * @var string Should contain the name of the element to create.
      */
-	private $name;
+    private $name;
 
     /**
      * @var string Should contain the element content.
      */
-	private $content;
+    private $content;
 
     /**
      * @var array Should contain an array of attributes.
      */
-	private $attributes;
+    private $attributes;
 
     /**
      * @var array Should contain an array of self closing HTML tags.
      */
-	private $selfClosingTags = [
+    private $selfClosingTags = [
         'area',
         'base',
         'br',
@@ -42,19 +43,19 @@ class HtmlElement {
      *
      * @return string
      */
-	public function __toString(): string
-	{
-		return $this->build();
-	}
+    public function __toString(): string
+    {
+        return $this->build();
+    }
 
     /**
      * HtmlElement constructor.
      * @param $name
      */
-	public function __construct($name)
-	{
-		$this->name = $name;
-	}
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
 
 
     /**
@@ -63,7 +64,7 @@ class HtmlElement {
      * @param array $attributes
      * @return $this
      */
-	public function setAttributes(array $attributes)
+    public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;
         return $this;
@@ -105,18 +106,19 @@ class HtmlElement {
      *
      * @return string
      */
-    private function startTag() {
+    private function startTag()
+    {
         $start = '<' . $this->name;
         $attributes = null;
         $end = '>';
 
         if (!empty($this->attributes)) {
             foreach ($this->attributes as $name => $value) {
-                $attributes .= ' ' . $name  . '="' . $value . '"';
+                $attributes .= ' ' . $name . '="' . $value . '"';
             }
         }
 
-	    return $start . $attributes . $end;
+        return $start . $attributes . $end;
     }
 
     /**
@@ -124,7 +126,8 @@ class HtmlElement {
      *
      * @return string|null
      */
-    private function endTag() {
+    private function endTag()
+    {
         if (in_array($this->name, $this->selfClosingTags)) {
             return null;
         }
@@ -135,11 +138,11 @@ class HtmlElement {
     /**
      * Generates the HTML.
      */
-	public function build(): string
-	{
-	    $html = $this->startTag() . $this->content . $this->endTag();
+    public function build(): string
+    {
+        $html = $this->startTag() . $this->content . $this->endTag();
 
-		return $html;
-	}
+        return $html;
+    }
 
 }
