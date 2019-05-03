@@ -1,0 +1,20 @@
+{
+  "name": "artyuum/html-element",
+  "description": "A PHP class giving you the ability to generate HTML elements.",
+  "authors": [
+    {
+      "name": "Artyum Petrov",
+      "email": "artyum@protonmail.com"
+    }
+  ],
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=7.0.0"
+  },
+  "autoload": {
+    "psr-0": {
+      "Artyum": "src/"
+    }
+  }
+}
