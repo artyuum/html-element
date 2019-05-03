@@ -44,7 +44,7 @@ $formElement
                         'id'            => 'username',
                         'name'          => 'username',
                         'placeholder'   => 'Username',
-                        'style'         => 'border: none; background-color: rgba(0, 0, 0, .1)',
+                        'style'         => 'border: none; background-color: rgba(100, 100, 255, .1)',
                         'required'      => true
                     ]),
                 $passwordInputElement
@@ -54,7 +54,7 @@ $formElement
                         'id'            => 'password',
                         'name'          => 'password',
                         'placeholder'   => 'Password',
-                        'style'         => 'border: none; background-color: rgba(0, 0, 0, .1)',
+                        'style'         => 'border: none; background-color: rgba(100, 100, 255, .1)',
                         'required'      => true
                     ]),
                 $buttonElement
@@ -76,7 +76,14 @@ echo $formElement;
 
 ## Output
 ```html
-(todo)
+<form action="/login" method="post">
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Username" style="border: none; background-color: rgba(100, 100, 255, .1); padding: 10px 15px" required="1">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Password" style="border: none; background-color: rgba(100, 100, 255, .1); padding: 10px 15px" required="1">
+        <button type="submit"><span class="fa fa-sign-in-alt">Login</span></button>
+    </div>
+</form>
 ```
 
 ## API
