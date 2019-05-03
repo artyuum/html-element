@@ -13,8 +13,8 @@
     "php": ">=7.0.0"
   },
   "autoload": {
-    "psr-0": {
-      "Artyum": "src/"
+    "psr-4": {
+      "Artyum\\": "src/"
     }
   }
 }
