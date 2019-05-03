@@ -39,23 +39,23 @@ $formElement
                     ->setContent('Username'),
                 $usernameInputElement
                     ->setAttributes([
-                        'type' 			=> 'text',
-                        'class' 		=> 'form-control',
-                        'id'			=> 'username',
-                        'name' 		    => 'username',
-                        'placeholder'	=> 'Username',
-                        'style'			=> 'border: none; background-color: rgba(0, 0, 0, .1)',
-                        'required'		=> true
+                        'type'          => 'text',
+                        'class'         => 'form-control',
+                        'id'            => 'username',
+                        'name'          => 'username',
+                        'placeholder'   => 'Username',
+                        'style'         => 'border: none; background-color: rgba(0, 0, 0, .1)',
+                        'required'      => true
                     ]),
                 $passwordInputElement
                     ->setAttributes([
-                        'type' 			=> 'password',
-                        'class' 		=> 'form-control',
-                        'id'			=> 'password',
-                        'name' 		    => 'password',
-                        'placeholder'	=> 'Password',
-                        'style'			=> 'border: none; background-color: rgba(0, 0, 0, .1)',
-                        'required'		=> true
+                        'type'          => 'password',
+                        'class'         => 'form-control',
+                        'id'            => 'password',
+                        'name'          => 'password',
+                        'placeholder'   => 'Password',
+                        'style'         => 'border: none; background-color: rgba(0, 0, 0, .1)',
+                        'required'      => true
                     ]),
                 $buttonElement
                     ->setAttributes([
@@ -76,15 +76,7 @@ echo $formElement;
 
 ## Output
 ```html
-<form action="." method="post">
-  <div class="form-group">
-    <label for="test">test</label>
-    <input type="text" class="test" id="test" value="test" placeholder="test" style="color: red; font-size: 15px" required="1">
-    <button type="submit">
-      <span class="fa fa-search">send</span>
-    </button>
-  </div>
-</form>
+(todo)
 ```
 
 ## API
@@ -151,7 +143,7 @@ setContent([
 build(): string
 ```
 **Description**  
-Will return the HTML code. Note that you can also simple do an `echo` on the instance and it will automatically calls the `build()` method, this is possible thanks to the `__toString()` magic method.  
+Will return the HTML code. Note that you can also simply do an `echo` on the instance and it will automatically calls the `build()` method. This is possible thanks to the `__toString()` magic method.  
 Example :  
 ```php
 // both will return the same result
