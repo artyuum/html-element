@@ -169,7 +169,6 @@ class HtmlElementTest extends TestCase
      */
     public function testNullAsContent()
     {
-
         $this->expectException(WrongArgumentTypeException::class);
 
         $element = new HtmlElement('div');
@@ -181,7 +180,6 @@ class HtmlElementTest extends TestCase
      */
     public function testIntegerAsContent()
     {
-
         $this->expectException(WrongArgumentTypeException::class);
 
         $element = new HtmlElement('div');
@@ -193,7 +191,6 @@ class HtmlElementTest extends TestCase
      */
     public function testFloatAsContent()
     {
-
         $this->expectException(WrongArgumentTypeException::class);
 
         $element = new HtmlElement('div');
@@ -205,7 +202,6 @@ class HtmlElementTest extends TestCase
      */
     public function testArrayAsContent()
     {
-
         $this->expectException(WrongArgumentTypeException::class);
 
         $element = new HtmlElement('div');
@@ -217,7 +213,6 @@ class HtmlElementTest extends TestCase
      */
     public function testObjectAsContent()
     {
-
         $this->expectException(WrongArgumentTypeException::class);
 
         $element = new HtmlElement('div');

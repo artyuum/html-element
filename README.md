@@ -2,8 +2,9 @@
 A PHP library giving you the ability to generate HTML elements. This library supports self-closing tags and boolean attributes.
 
 ## Why did I create this ?
-I used to work on a non-MVC PHP project and sometimes I needed to output few lines of HTML directly from the functions. I was having hard time outputting HTML code from the functions without doing some crazy and ugly concatenations. Of course, I could have split up the PHP and HTML code in separate files and then make PHP calls the appropried file to display the HTML code but I didn't have time to refactor the project at the time.
-That's why I came up with the idea of generating HTML elements using PHP.  
+I used to work on a non-MVC PHP project and sometimes I needed to output few lines of HTML directly from the functions.
+Having to mix HTML code in PHP code was inconsistent to me and it was hard to keep the code easily readable and easy to maintain in the longterm because of the crazy and ugly concatenations. 
+That's why I came up with the idea of generating HTML elements directly in PHP.    
 There are few existing libraries on Packagist that have the same purpose but I wasn't really satisfied and I also wanted to create this one for learning purpose.
 
 ## Requirements
