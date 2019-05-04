@@ -1,13 +1,19 @@
 # HtmlElement
-A PHP class giving you the ability to generate HTML elements (WIP)
-In theory, you just be able to generate any HTML elements using this library and it support self-closing tags.
+A PHP library giving you the ability to generate HTML elements. This library supports self-closing tags and boolean attributes.
 
 ## Why did I create this ?
-I used to work on a WordPress plugin made in MVC and I was having hard time outputting HTML code from the plugin methods without doing some crazy and ugly concatenations. Of course, I could have split the PHP and HTML code by putting the HTML code into templates files and then make PHP calls the appropried file but I didn't have time to refactor this plugin.
-That's why I came up with the idea of generating HTML elements using PHP. There are some libraries on Packagist that have the same purpose but I wasn't really satisfied and I also wanted to create this one for learning purpose.
+I used to work on a non-MVC PHP project and sometimes I needed to output few lines of HTML directly from the functions. I was having hard time outputting HTML code from the functions without doing some crazy and ugly concatenations. Of course, I could have split up the PHP and HTML code in separate files and then make PHP calls the appropried file to display the HTML code but I didn't have time to refactor the project at the time.
+That's why I came up with the idea of generating HTML elements using PHP.  
+There are few existing libraries on Packagist that have the same purpose but I wasn't really satisfied and I also wanted to create this one for learning purpose.
 
 ## Requirements
 * PHP 7.0
+* Composer
+
+## Installation
+```
+composer require artyuum/html-element
+```
 
 ## Usage example
 An example of login form creation.
@@ -79,8 +85,8 @@ echo $formElement;
 <form action="/login" method="post">
     <div class="form-group">
         <label for="username">Username</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Username" style="border: none; background-color: rgba(100, 100, 255, .1); padding: 10px 15px" required="1">
-        <input type="password" class="form-control" id="password" name="password" placeholder="Password" style="border: none; background-color: rgba(100, 100, 255, .1); padding: 10px 15px" required="1">
+        <input type="text" class="form-control" id="username" name="username" placeholder="Username" style="border: none; background-color: rgba(100, 100, 255, .1); padding: 10px 15px" required="required">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Password" style="border: none; background-color: rgba(100, 100, 255, .1); padding: 10px 15px" required="required">
         <button type="submit"><span class="fa fa-sign-in-alt">Login</span></button>
     </div>
 </form>
@@ -90,6 +96,7 @@ echo $formElement;
 ```php
 getAttributes(): array
 ```
+**Description**  
 Will return an array of attributes assigned to the HTML element.
 
 ---

@@ -158,7 +158,14 @@ class HtmlElement
 
         if (!empty($this->attributes)) {
             foreach ($this->attributes as $name => $value) {
-                $attributes .= ' ' . $name . '="' . $value . '"';
+                // ref. https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes#Boolean_Attributes
+                if ($value === true) { // if the value of the attribute is true we set its name as value (e.g required attribute)
+                    $attributes .= ' ' . $name . '="' . $name . '"';
+                } else if ($value === false) { // if the value of the attribute if false, then we add "off" as value (e.g autocomplete attribute)
+                    $attributes .= ' ' . $name . '="off"';
+                } else { // if it's not a boolean attribute we just add the value without modifying it (e.g class attribute)
+                    $attributes .= ' ' . $name . '="' . $value . '"';
+                }
             }
         }
 
