@@ -97,7 +97,8 @@ Will return an array of attributes assigned to the HTML element.
 setAttributes(array $attributes): HtmlElement
 ```
 **Description**  
-Takes an associative array of attributes. Example :
+Takes an associative array of attributes.  
+**Example**  
 ```php
 setAttributes([
     'class' => 'is-red',
@@ -118,7 +119,7 @@ setContent(...$content): HtmlElement
 ```
 **Description**  
 You can pass a string or a HtmlElement instance. Note the splat operator (...), this means that you can pass as much argument as you want.  
-Example : 
+**Example** 
 ```php
 // by passing HtmlElement instances (using variables)
 setContent([
@@ -151,7 +152,7 @@ build(): string
 ```
 **Description**  
 Will return the HTML code. Note that you can also simply do an `echo` on the instance and it will automatically calls the `build()` method. This is possible thanks to the `__toString()` magic method.  
-Example :  
+**Example**  
 ```php
 // both will return the same result
 echo $formElement->build();
