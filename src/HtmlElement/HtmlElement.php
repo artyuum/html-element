@@ -6,14 +6,9 @@ use Artyum\HtmlElement\Exceptions\SelfClosingTagException;
 use Artyum\HtmlElement\Exceptions\WrongArgumentTypeException;
 
 /**
- * Class HtmlElement.
+ * Class HtmlElement
  *
  * This class allows you to create HTML elements and assign attributes or content to them.
- *
- * @author Artyum <artyum@protonmail.com>
- * @license http://www.opensource.org/licenses/mit-license.html MIT License
- * @version 1.0
- * @link https://github.com/artyuum/HtmlElement
  */
 class HtmlElement
 {
