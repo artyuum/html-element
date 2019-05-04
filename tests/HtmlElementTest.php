@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use stdClass;
 use PHPUnit\Framework\TestCase;
 use Artyum\HtmlElement\HtmlElement;
 use Artyum\HtmlElement\Exceptions\SelfClosingTagException;
