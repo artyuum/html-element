@@ -1,6 +1,7 @@
 {
   "name": "artyuum/html-element",
   "description": "A PHP class giving you the ability to generate HTML elements.",
+  "keywords": ["html", "html5", "form"],
   "authors": [
     {
       "name": "Artyum Petrov",
