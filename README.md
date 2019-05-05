@@ -1,11 +1,15 @@
 # HtmlElement
-A PHP library giving you the ability to generate HTML elements. This library supports self-closing tags and boolean attributes.
+A PHP library giving you the ability to generate HTML elements.
 
 ## Why did I create this ?
 I used to work on a non-MVC PHP project and sometimes I needed to output few lines of HTML directly from the functions.
 Having to mix HTML code in PHP code was inconsistent to me and it was hard to keep the code easily readable and easy to maintain in the longterm because of the crazy and ugly concatenations. 
 That's why I came up with the idea of generating HTML elements directly in PHP.    
 There are few existing libraries on Packagist that have the same purpose but I wasn't really satisfied and I also wanted to create this one for learning purpose.
+
+## Features
+* Supports self-closing tags. (e.g input tag)
+* Supports boolean attributes. (e.g required attribute)
 
 ## Requirements
 * PHP 7.0
@@ -95,6 +99,15 @@ echo $formElement;
 
 ## API
 ```php
+__construct(string $name, array $options)
+```
+**Description**  
+When instantiating HtmlElelement class, you must provide the element name as first argument and optionally an array of options as second argument.  
+List of available options :  
+* autoclose *if set as false, the element will be generated without a closing-tag.*  
+---
+
+```php
 getAttributes(): array
 ```
 **Description**  
@@ -156,6 +169,13 @@ setContent([
 
 ---
 ```php
+getOptions(): string
+```
+**Description**  
+Will return an array of options.  
+
+---
+```php
 build(): string
 ```
 **Description**  
@@ -166,6 +186,13 @@ Will return the HTML code. Note that you can also simply do an `echo` on the ins
 echo $formElement->build();
 echo $formElement;
 ```
+
+## Changelog
+* **v1.1** - 2019-05-05   
+You can now pass an array of $options[] to the constructor when instantiating the HtmlElement class.
+
+* **v1** - 2019-05-04  
+The library is fully functional and ready to use.
 
 ## Contributing
 If you'd like to contribute, please fork the repository and make changes as you'd like. Pull requests are warmly welcome.

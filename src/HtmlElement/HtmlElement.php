@@ -19,6 +19,11 @@ class HtmlElement
     private $name;
 
     /**
+     * @var array Should contain an array of options.
+     */
+    private $options;
+
+    /**
      * @var string Should contain the element content.
      */
     private $content;
@@ -61,11 +66,13 @@ class HtmlElement
     /**
      * HtmlElement constructor.
      *
-     * @param $name
+     * @param string $name
+     * @param array $options
      */
-    public function __construct($name)
+    public function __construct(string $name, array $options = null)
     {
         $this->name = $name;
+        $this->options = $options;
     }
 
     /**
@@ -115,19 +122,27 @@ class HtmlElement
             throw new SelfClosingTagException('A self-closing tag cannot have a content.');
         }
 
-        if (is_array($content)) {
-            foreach ($content as $element) {
-                if (is_string($element)) {
-                    $this->content .= $element;
-                } elseif ($element instanceof $this) {
-                    $this->content .= $element->build();
-                } else {
-                    throw new WrongArgumentTypeException('Argument should be either a string or an instance of HtmlElement.');
-                }
+        foreach ($content as $element) {
+            if (is_string($element)) {
+                $this->content .= $element;
+            } elseif ($element instanceof $this) {
+                $this->content .= $element->build();
+            } else {
+                throw new WrongArgumentTypeException('Argument should be either a string or an instance of HtmlElement.');
             }
         }
 
         return $this;
+    }
+
+    /**
+     * Gets the element options.
+     *
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 
     /**
@@ -137,7 +152,7 @@ class HtmlElement
      */
     private function isSelfClosing(): bool
     {
-        return in_array($this->name, $this->selfClosingTags);
+        return in_array($this->name, $this->selfClosingTags) || $this->options['autoclose'] === false;
     }
 
     /**

@@ -33,8 +33,7 @@ class HtmlElementTest extends TestCase
 
         $this->assertEquals(
             '<div>test</div>',
-            $element
-                ->setContent('test')
+            $element->setContent('test')
         );
     }
 
@@ -68,6 +67,21 @@ class HtmlElementTest extends TestCase
                 'autocomplete'      => false,
                 'required'          => true
             ])
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function testElementCreationWithOptions()
+    {
+        $element = new HtmlElement('div', [
+            'autoclose' => false
+        ]);
+
+        $this->assertEquals(
+            '<div>',
+            $element
         );
     }
 
@@ -157,7 +171,6 @@ class HtmlElementTest extends TestCase
      */
     public function testBooleanAsContent()
     {
-
         $this->expectException(WrongArgumentTypeException::class);
 
         $element = new HtmlElement('div');
