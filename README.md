@@ -225,7 +225,7 @@ setContent(...$content): self
 ```  
 
 ## Changelog
-* **v2.0** - 2019-12-28
+* **v2.0** - 2019-12-29
     * Re-arranged the code
     * Now requiring PHP 7.2 or above
     * Removed an unneeded exception and added a new one
