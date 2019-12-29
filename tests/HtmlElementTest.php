@@ -2,19 +2,15 @@
 
 namespace Tests;
 
-use stdClass;
-use PHPUnit\Framework\TestCase;
-use Artyum\HtmlElement\HtmlElement;
 use Artyum\HtmlElement\Exceptions\SelfClosingTagException;
-use Artyum\HtmlElement\Exceptions\WrongArgumentTypeException;
+use Artyum\HtmlElement\HtmlElement;
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
+use stdClass;
 
 class HtmlElementTest extends TestCase
 {
-
-    /**
-     * @test
-     */
-    public function testElementCreation()
+    public function testSimpleElement()
     {
         $element = new HtmlElement('div');
 
@@ -24,10 +20,75 @@ class HtmlElementTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function testElementCreationWithContent()
+    public function testSelfClosingElement()
+    {
+        $element = new HtmlElement('input');
+
+        $this->assertEquals(
+            '<input>',
+            $element
+        );
+    }
+
+    public function testElementWithAttributes()
+    {
+        $element = new HtmlElement('div');
+
+        $this->assertEquals(
+            '<div class="test" title="test"></div>',
+            $element->addAttributes([
+                'class' => 'test',
+                'title' => 'test',
+            ])
+        );
+    }
+
+    public function testElementWithArrayAsAttributeValue()
+    {
+        $element = new HtmlElement('div');
+
+        $this->assertEquals(
+            '<div style="width: 100px; height: 100px;"></div>',
+            $element->addAttributes([
+                'style' => [
+                    'width'  => '100px',
+                    'height' => '100px',
+                ],
+            ])
+        );
+    }
+
+    public function testAttributesMerging()
+    {
+        $element = new HtmlElement('input');
+
+        $this->assertEquals(
+            '<input class="test" required>',
+            $element
+                ->addAttributes([
+                    'class' => 'test'
+                ])
+                ->addAttributes([
+                    'required' => true
+                ])
+        );
+    }
+
+    public function testBooleanAttributes()
+    {
+        $element = new HtmlElement('input');
+
+        $this->assertEquals(
+            '<input autocapitalize="off" autocomplete="off" required>',
+            $element->addAttributes([
+                'autocapitalize' => false,
+                'autocomplete'   => false,
+                'required'       => true,
+            ])
+        );
+    }
+
+    public function testSimpleContent()
     {
         $element = new HtmlElement('div');
 
@@ -37,99 +98,65 @@ class HtmlElementTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function testElementCreationWithAttributes()
+    public function testMultipleContent()
+    {
+        $element = new HtmlElement('div');
+        $string = 'test';
+        $integer = 1;
+        $float = 1.1;
+
+        $this->assertEquals(
+            '<div><div></div>test11.1</div>',
+            $element->setContent($element, $string, $integer, $float)
+        );
+    }
+
+    public function testNestedContent()
     {
         $element = new HtmlElement('div');
 
-        $this->assertEquals(
-            '<div class="test" style="width: 100px;"></div>',
-            $element->setAttributes([
-                'class' => 'test',
-                'style' => 'width: 100px;'
-            ])
+        $element->setContent(
+            (new HtmlElement('div'))->setContent(new HtmlElement('div'))
         );
-    }
-
-    /**
-     * @test
-     */
-    public function testElementCreationWithBooleanAttributes()
-    {
-        $element = new HtmlElement('input');
 
         $this->assertEquals(
-            '<input autocapitalize="off" autocomplete="off" required="required">',
-            $element->setAttributes([
-                'autocapitalize'    => false,
-                'autocomplete'      => false,
-                'required'          => true
-            ])
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function testElementCreationWithOptions()
-    {
-        $element = new HtmlElement('div', [
-            'autoclose' => false
-        ]);
-
-        $this->assertEquals(
-            '<div>',
+            '<div><div><div></div></div></div>',
             $element
         );
     }
 
-    /**
-     * @test
-     */
-    public function testGetAttributes()
+    public function testBooleanAsContent()
     {
-        $element = new HtmlElement('input');
+        $this->expectException(InvalidArgumentException::class);
 
-        $this->assertEquals(
-            [
-                'class' => 'test',
-                'style' => 'width: 100px;',
-                'autocapitalize'    => false,
-                'autocomplete'      => false,
-                'required'          => true
-            ],
-            $element
-                ->setAttributes([
-                    'class' => 'test',
-                    'style' => 'width: 100px;',
-                    'autocapitalize'    => false,
-                    'autocomplete'      => false,
-                    'required'          => true
-                ])
-                ->getAttributes()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function testGetElementContent()
-    {
         $element = new HtmlElement('div');
-
-        $this->assertEquals(
-            'test',
-            $element
-                ->setContent('test')
-                ->getContent()
-        );
+        $element->setContent(true);
     }
 
-    /**
-     * @test
-     */
+    public function testNullAsContent()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $element = new HtmlElement('div');
+        $element->setContent(null);
+    }
+
+    public function testArrayAsContent()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $element = new HtmlElement('div');
+        $element->setContent([]);
+    }
+
+    public function testObjectAsContent()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $element = new HtmlElement('div');
+        $element->setContent(new stdClass());
+    }
+
     public function testSetContentOnSelfClosingTag()
     {
         $this->expectException(SelfClosingTagException::class);
@@ -138,98 +165,15 @@ class HtmlElementTest extends TestCase
         $element->setContent('test');
     }
 
-    /**
-     * @test
-     */
-    public function testHTMLElementAsContent()
+    public function testAutocloseOption()
     {
-        $element = new HtmlElement('div');
-        $secondElement = new HtmlElement('div');
+        $element = new HtmlElement('div', [
+            'autoclose' => false,
+        ]);
 
         $this->assertEquals(
-            '<div><div></div></div>',
-            $element->setContent($secondElement)
+            '<div>',
+            $element
         );
     }
-
-    /**
-     * @test
-     */
-    public function testMultipleContent()
-    {
-        $element = new HtmlElement('div');
-        $secondElement = new HtmlElement('div');
-
-        $this->assertEquals(
-            '<div><div></div>test</div>',
-            $element->setContent($secondElement, 'test')
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function testBooleanAsContent()
-    {
-        $this->expectException(WrongArgumentTypeException::class);
-
-        $element = new HtmlElement('div');
-        $element->setContent(true);
-    }
-
-    /**
-     * @test
-     */
-    public function testNullAsContent()
-    {
-        $this->expectException(WrongArgumentTypeException::class);
-
-        $element = new HtmlElement('div');
-        $element->setContent(null);
-    }
-
-    /**
-     * @test
-     */
-    public function testIntegerAsContent()
-    {
-        $this->expectException(WrongArgumentTypeException::class);
-
-        $element = new HtmlElement('div');
-        $element->setContent(1);
-    }
-
-    /**
-     * @test
-     */
-    public function testFloatAsContent()
-    {
-        $this->expectException(WrongArgumentTypeException::class);
-
-        $element = new HtmlElement('div');
-        $element->setContent(10.365);
-    }
-
-    /**
-     * @test
-     */
-    public function testArrayAsContent()
-    {
-        $this->expectException(WrongArgumentTypeException::class);
-
-        $element = new HtmlElement('div');
-        $element->setContent(array());
-    }
-
-    /**
-     * @test
-     */
-    public function testObjectAsContent()
-    {
-        $this->expectException(WrongArgumentTypeException::class);
-
-        $element = new HtmlElement('div');
-        $element->setContent(new stdClass());
-    }
-
 }

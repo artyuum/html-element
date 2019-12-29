@@ -1,34 +1,39 @@
 {
-  "name": "artyuum/html-element",
-  "description": "A PHP class giving you the ability to generate HTML elements.",
-  "keywords": ["html", "html5", "form"],
-  "authors": [
-    {
-      "name": "Artyum Petrov",
-      "email": "artyum@protonmail.com"
+    "name": "artyuum/html-element",
+    "description": "A PHP class giving you the ability to generate HTML elements.",
+    "keywords": [
+        "html",
+        "html5",
+        "form",
+        "html-builder"
+    ],
+    "authors": [
+        {
+            "name": "Artyum Petrov",
+            "email": "artyum@protonmail.com"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Artyum\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7"
+    },
+    "config": {
+        "sort-packages": true
     }
-  ],
-  "license": "MIT",
-  "require": {
-    "php": ">=7.0.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "Artyum\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": "tests/"
-    }
-  },
-  "scripts": {
-    "test": "phpunit"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^7"
-  },
-  "config": {
-    "sort-packages": true
-  }
 }

@@ -2,19 +2,21 @@
 
 namespace Artyum\HtmlElement;
 
+use InvalidArgumentException;
 use Artyum\HtmlElement\Exceptions\SelfClosingTagException;
-use Artyum\HtmlElement\Exceptions\WrongArgumentTypeException;
+use Artyum\HtmlElement\Exceptions\WrongAttributeValueException;
 
 /**
  * Class HtmlElement
  *
- * This class allows you to create HTML elements and assign attributes or content to them.
+ * This class gives you the ability to easily create HTML elements and add attributes/content to them.
+ *
+ * @package Artyum\HtmlElement
  */
 class HtmlElement
 {
-
     /**
-     * @var string Should contain the name of the element to create.
+     * @var string Should contain the name of the HTML element to create.
      */
     private $name;
 
@@ -24,17 +26,17 @@ class HtmlElement
     private $options;
 
     /**
-     * @var string Should contain the element content.
+     * @var string Should contain the content of the element.
      */
     private $content;
 
     /**
-     * @var array Should contain an array of attributes.
+     * @var array Should contain an array of HTML attributes with their values.
      */
     private $attributes;
 
     /**
-     * @var array Should contain an array of self closing HTML tags.
+     * @var array Should contain an array of self-closing HTML tags.
      */
     private $selfClosingTags = [
         'area',
@@ -50,8 +52,20 @@ class HtmlElement
         'param',
         'source',
         'track',
-        'wbr'
+        'wbr',
     ];
+
+    /**
+     * HtmlElement constructor.
+     *
+     * @param string $name
+     * @param array|null $options
+     */
+    public function __construct(?string $name = null, ?array $options = null)
+    {
+        $this->name = trim($name); // removes any space around
+        $this->options = $options;
+    }
 
     /**
      * Gets the generated HTML.
@@ -60,40 +74,204 @@ class HtmlElement
      */
     public function __toString(): string
     {
-        return $this->build();
+        return $this->toHtml();
     }
 
     /**
-     * HtmlElement constructor.
+     * Generates the HTML code.
+     */
+    public function toHtml(): string
+    {
+        return $this->startTag() . $this->content . $this->endTag();
+    }
+
+    /**
+     * Gets the element start tag.
+     *
+     * @return string
+     */
+    private function startTag(): string
+    {
+        return '<' . $this->name . $this->buildAttributes() . '>';
+    }
+
+    /**
+     * Builds the element's attributes.
+     *
+     * @return string|null
+     */
+    private function buildAttributes(): ?string
+    {
+        $attributes = null;
+
+        // ensures that the attributes have been set
+        if ($this->attributes) {
+            foreach ($this->attributes as $name => $value) {
+                $name = trim($name); // removes any space around
+
+                // handles the attribute to generate based on the type of the value
+                switch (gettype($value)) {
+                    case 'boolean':
+                        if ($value === true) { // adds the name of the attribute but without a value (e.g required attribute)
+                            $attributes .= ' ' . $name;
+                        } else {  // adds "off" as value (e.g autocomplete attribute)
+                            $attributes .= ' ' . $name . '="off"';
+                        }
+                        break;
+                    case 'array': // style attribute
+                        $multipleValues = null;
+                        foreach ($value as $propertyName => $propertyValue) {
+                            $multipleValues .= $propertyName . ': ' . $propertyValue . '; ';
+                        }
+                        $attributes .= ' ' . $name . '="' . trim($multipleValues) . '"';
+                        break;
+                    case 'double':
+                    case 'integer':
+                    case 'string':
+                        // adds the name of the attribute along with its value without modifying it
+                        $attributes .= ' ' . $name . '="' . $value . '"';
+                        break;
+                }
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
+     * Gets the element end tag.
+     *
+     * @return string
+     */
+    private function endTag(): ?string
+    {
+        // ends here if the element should not have a closing tag
+        if ($this->hasSelfClosingTag()) {
+            return null;
+        }
+
+        return '</' . $this->name . '>';
+    }
+
+    /**
+     * Checks if the element has a self-closing tag.
+     *
+     * @return bool
+     */
+    private function hasSelfClosingTag(): bool
+    {
+        return in_array($this->name, $this->selfClosingTags) || $this->options['autoclose'] === false;
+    }
+
+    /**
+     * Validates the attributes.
+     *
+     * @param array $attributes
+     * @throws WrongAttributeValueException
+     */
+    private function validateAttributes(array $attributes): void
+    {
+        // ensures that the attributes has a valid value
+        foreach ($attributes as $name => $value) {
+            if (
+                !is_bool($value) &&
+                !is_array($value) &&
+                !is_float($value) &&
+                !is_int($value) &&
+                !is_string($value)
+            ) {
+                throw new WrongAttributeValueException('The following attribute does not have a valid value: ' . $name);
+            }
+
+            // validate the content of the array (if the value is an array)
+            if (is_array($value)) {
+                foreach ($value as $propertyName => $propertyValue) {
+                    // ensures that the value of the property is valid
+                    if (
+                        !is_string($propertyValue) &&
+                        !is_int($propertyValue) &&
+                        !is_float($propertyValue)
+                    ) {
+                        throw new WrongAttributeValueException('The following attribute does not have a valid value: ' . $propertyName);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Gets the name of the element.
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Sets the name of the element.
      *
      * @param string $name
-     * @param array $options
+     * @return HtmlElement
      */
-    public function __construct(string $name, array $options = null)
+    public function setName(string $name): self
     {
-        $this->name = $name;
+        $this->name = trim($name); // removes any space around
+
+        return $this;
+    }
+
+    /**
+     * Gets the options.
+     *
+     * @return array|null
+     */
+    public function getOptions(): ?array
+    {
+        return $this->options;
+    }
+
+    /**
+     * Sets the options.
+     *
+     * @param array $options
+     * @return HtmlElement
+     */
+    public function setOptions(array $options): self
+    {
         $this->options = $options;
+
+        return $this;
     }
 
     /**
      * Get an array of attributes assigned to the element.
      *
-     * @return array
+     * @return array|null
      */
-    public function getAttributes(): array
+    public function getAttributes(): ?array
     {
         return $this->attributes;
     }
 
     /**
-     * Sets the element attributes.
+     * Adds attributes to the element.
      *
      * @param array $attributes
      * @return $this
+     * @throws WrongAttributeValueException
      */
-    public function setAttributes(array $attributes): HtmlElement
+    public function addAttributes(array $attributes): self
     {
-        $this->attributes = $attributes;
+        // ensures that the attributes value is valid
+        $this->validateAttributes($attributes);
+
+        if ($this->attributes) {
+            $this->attributes = array_merge($this->attributes, $attributes);
+        } else {
+            $this->attributes = $attributes;
+        }
 
         return $this;
     }
@@ -101,9 +279,9 @@ class HtmlElement
     /**
      * Gets the element content.
      *
-     * @return string
+     * @return string|null
      */
-    public function getContent(): string
+    public function getContent(): ?string
     {
         return $this->content;
     }
@@ -114,97 +292,29 @@ class HtmlElement
      * @param mixed ...$content
      * @return HtmlElement
      * @throws SelfClosingTagException
-     * @throws WrongArgumentTypeException
+     * @throws InvalidArgumentException
      */
-    public function setContent(...$content): HtmlElement
+    public function setContent(...$content): self
     {
-        if ($this->isSelfClosing()) {
+        // ensures that we are not adding a content to a self-closing element/tag.
+        if ($this->hasSelfClosingTag()) {
             throw new SelfClosingTagException('A self-closing tag cannot have a content.');
         }
 
         foreach ($content as $element) {
-            if (is_string($element)) {
+            if (
+                is_string($element) ||
+                is_int($element) ||
+                is_float($element)
+            ) {
                 $this->content .= $element;
-            } elseif ($element instanceof $this) {
-                $this->content .= $element->build();
+            } else if ($element instanceof $this) {
+                $this->content .= $element->toHtml();
             } else {
-                throw new WrongArgumentTypeException('Argument should be either a string or an instance of HtmlElement.');
+                throw new InvalidArgumentException('The $content argument must be either a string or an instance of ' . self::class);
             }
         }
 
         return $this;
     }
-
-    /**
-     * Gets the element options.
-     *
-     * @return array
-     */
-    public function getOptions(): array
-    {
-        return $this->options;
-    }
-
-    /**
-     * Checks if it's a self-closing tag.
-     *
-     * @return bool
-     */
-    private function isSelfClosing(): bool
-    {
-        return in_array($this->name, $this->selfClosingTags) || $this->options['autoclose'] === false;
-    }
-
-    /**
-     * Gets the element start tag.
-     *
-     * @return string
-     */
-    private function startTag(): string
-    {
-        $start = '<' . $this->name;
-        $attributes = null;
-        $end = '>';
-
-        if (!empty($this->attributes)) {
-            foreach ($this->attributes as $name => $value) {
-                // ref. https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes#Boolean_Attributes
-                if ($value === true) { // if the value of the attribute is true we set its name as value (e.g required attribute)
-                    $attributes .= ' ' . $name . '="' . $name . '"';
-                } else if ($value === false) { // if the value of the attribute if false, then we add "off" as value (e.g autocomplete attribute)
-                    $attributes .= ' ' . $name . '="off"';
-                } else { // if it's not a boolean attribute we just add the value without modifying it (e.g class attribute)
-                    $attributes .= ' ' . $name . '="' . $value . '"';
-                }
-            }
-        }
-
-        return $start . $attributes . $end;
-    }
-
-    /**
-     * Gets the element end tag.
-     *
-     * @return string|null
-     */
-    private function endTag()
-    {
-        // we don't output a closing tag if it's a self-closing tag
-        if ($this->isSelfClosing()) {
-            return null;
-        }
-
-        return '</' . $this->name . '>';
-    }
-
-    /**
-     * Generates the HTML code.
-     */
-    public function build(): string
-    {
-        $html = $this->startTag() . $this->content . $this->endTag();
-
-        return $html;
-    }
-
 }

@@ -1,18 +1,18 @@
 # HtmlElement
-A PHP library giving you the ability to generate HTML elements.
+A PHP library giving you the ability to generate HTML elements in an object oriented way.
 
 ## Why did I create this ?
 I used to work on a non-MVC PHP project and sometimes I needed to output few lines of HTML directly from the functions.
 Having to mix HTML code in PHP code was inconsistent to me and it was hard to keep the code easily readable and easy to maintain in the longterm because of the crazy and ugly concatenations. 
-That's why I came up with the idea of generating HTML elements directly in PHP.    
-There are few existing libraries on Packagist that have the same purpose but I wasn't really satisfied and I also wanted to create this one for learning purpose.
+That's why I came up with the idea of generating HTML elements directly in PHP. (of course if you need to create many HTML elements, you should consider using a templating engine instead)    
+There are few existing libraries on Packagist that have the same purpose but I wasn't really satisfied and I also wanted to create my own library for fun & learning purpose.
 
 ## Features
 * Supports self-closing tags. (e.g input tag)
 * Supports boolean attributes. (e.g required attribute)
 
 ## Requirements
-* PHP 7.0
+* PHP 7.2 or above
 * Composer
 
 ## Installation
@@ -20,62 +20,98 @@ There are few existing libraries on Packagist that have the same purpose but I w
 composer require artyuum/html-element
 ```
 
-## Usage example
-An example of login form creation.
+## Examples
+### Simple
+A simple DIV element with some attributes & a content.
 
 ```php
-$formElement = new HtmlElement('form');
-$divElement = new HtmlElement('div');
-$labelElement = new HtmlElement('label');
-$usernameInputElement = new HtmlElement('input');
-$passwordInputElement = new HtmlElement('input');
-$buttonElement = new HtmlElement('button');
-$spanElement = new HtmlElement('span');
+$divElement = new Artyum\HtmlElement\HtmlElement('div');
+
+$divElement
+    ->addAttributes([
+        'title' => 'test',
+        'style' => [
+            'background-color' => 'red'
+        ],
+        'contenteditable' => true
+    ])
+    ->setContent('This is a DIV with a red background.')
+;
+
+echo $divElement;
+// or 
+echo $divElement->toHtml();
+```
+
+**Output** 
+```html
+<div title="test" style="background-color: red;" contenteditable>
+    This is a DIV with a red background.
+</div>
+```
+
+### Advanced
+An example of a login form that contains childrens.
+
+```php
+$formElement = new Artyum\HtmlElement\HtmlElement('form');
+$divElement = new Artyum\HtmlElement\HtmlElement('div');
+$labelElement = new Artyum\HtmlElement\HtmlElement('label');
+$usernameInputElement = new Artyum\HtmlElement\HtmlElement('input');
+$passwordInputElement = new Artyum\HtmlElement\HtmlElement('input');
+$buttonElement = new Artyum\HtmlElement\HtmlElement('button');
+$spanElement = new Artyum\HtmlElement\HtmlElement('span');
 
 $formElement
-    ->setAttributes([
+    ->addAttributes([
         'action' => '/login',
-        'method' => 'post'
+        'method' => 'post',
     ])
     ->setContent(
         $divElement
-            ->setAttributes([
-                'class' => 'form-group'
+            ->addAttributes([
+                'class' => 'form-group',
             ])
             ->setContent(
                 $labelElement
-                    ->setAttributes([
-                        'for' => 'username'
+                    ->addAttributes([
+                        'for' => 'username',
                     ])
                     ->setContent('Username'),
                 $usernameInputElement
-                    ->setAttributes([
-                        'type'          => 'text',
-                        'class'         => 'form-control',
-                        'id'            => 'username',
-                        'name'          => 'username',
-                        'placeholder'   => 'Username',
-                        'style'         => 'border: none; background-color: rgba(100, 100, 255, .1)',
-                        'required'      => true
+                    ->addAttributes([
+                        'type'        => 'text',
+                        'class'       => 'form-control',
+                        'id'          => 'username',
+                        'name'        => 'username',
+                        'placeholder' => 'Username',
+                        'style'       => [
+                            'border'           => 'none',
+                            'background-color' => 'rgba(100, 100, 255, .1)',
+                        ],
+                        'required'    => true,
                     ]),
                 $passwordInputElement
-                    ->setAttributes([
-                        'type'          => 'password',
-                        'class'         => 'form-control',
-                        'id'            => 'password',
-                        'name'          => 'password',
-                        'placeholder'   => 'Password',
-                        'style'         => 'border: none; background-color: rgba(100, 100, 255, .1)',
-                        'required'      => true
+                    ->addAttributes([
+                        'type'        => 'password',
+                        'class'       => 'form-control',
+                        'id'          => 'password',
+                        'name'        => 'password',
+                        'placeholder' => 'Password',
+                        'style'       => [
+                            'border'           => 'none',
+                            'background-color' => 'rgba(100, 100, 255, .1)',
+                        ],
+                        'required'    => true,
                     ]),
                 $buttonElement
-                    ->setAttributes([
-                        'type' => 'submit'
+                    ->addAttributes([
+                        'type' => 'submit',
                     ])
                     ->setContent(
                         $spanElement
-                            ->setAttributes([
-                                'class'=> 'fa fa-sign-in-alt'
+                            ->addAttributes([
+                                'class' => 'fa fa-sign-in-alt',
                             ])
                             ->setContent('Login')
                     )
@@ -83,116 +119,132 @@ $formElement
     );
 
 echo $formElement;
+// or
+echo $formElement->toHtml();
 ```
 
-## Output
+**Output**
 ```html
 <form action="/login" method="post">
     <div class="form-group">
         <label for="username">Username</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Username" style="border: none; background-color: rgba(100, 100, 255, .1); padding: 10px 15px" required="required">
-        <input type="password" class="form-control" id="password" name="password" placeholder="Password" style="border: none; background-color: rgba(100, 100, 255, .1); padding: 10px 15px" required="required">
+        <input type="text" class="form-control" id="username" name="username" placeholder="Username" style="border: none; background-color: rgba(100, 100, 255, .1); padding: 10px 15px" required>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Password" style="border: none; background-color: rgba(100, 100, 255, .1); padding: 10px 15px" required>
         <button type="submit"><span class="fa fa-sign-in-alt">Login</span></button>
     </div>
 </form>
 ```
 
 ## API
+When instantiating the HtmlElelement class, you can optionally provide the name of the element as first argument and an array of options as second argument.
 ```php
-__construct(string $name, array $options)
-```
-**Description**  
-When instantiating HtmlElelement class, you must provide the element name as first argument and optionally an array of options as second argument.  
-List of available options :  
-* autoclose *if set as false, the element will be generated without a closing-tag.*  
----
-
-```php
-getAttributes(): array
-```
-**Description**  
-Will return an array of attributes assigned to the HTML element.
+__construct(?string $name = null, ?array $options = null)
+```  
 
 ---
+Gets the generated HTML code.
 ```php
-setAttributes(array $attributes): HtmlElement
-```
-**Description**  
-Takes an associative array of attributes.  
+toHtml(): string
+```  
+Note that you can also simply do an `echo` on the instance and it will internally call the `toHtml()` method. This is possible thanks to the `__toString()` magic method.  
+
 **Example**  
 ```php
-setAttributes([
-    'class' => 'is-red',
-    'style' => 'font-size: 2em'
-]);
-```
+$html = $formElement->toHtml();
 
----
-```php
-getContent(): string
-```
-**Description**  
-Will return the content of the HTML element.
-
----
-```php
-setContent(...$content): HtmlElement
-```
-**Description**  
-You can pass a string or a HtmlElement instance. Note the splat operator (...), this means that you can pass as much argument as you want.  
-**Example** 
-```php
-// by passing HtmlElement instances (using variables)
-setContent([
-    $inputElement,
-    $buttonElement
-]);
-
-// by passing HtmlElement instances (without using variables)
-setContent([
-    (new HtmlElement('input')),
-    (new HtmlElement('button')),
-]);
-
-// by passing a string
-setContent([
-    'Lorem ipsum...'
-]);
-
-// by passing all three
-setContent([
-    $inputElement,
-    (new HtmlElement('button')),
-    'Lorem ipsum...'
-]);
-```
-
----
-```php
-getOptions(): string
-```
-**Description**  
-Will return an array of options.  
-
----
-```php
-build(): string
-```
-**Description**  
-Will return the HTML code. Note that you can also simply do an `echo` on the instance and it will automatically calls the `build()` method. This is possible thanks to the `__toString()` magic method.  
-**Example**  
-```php
 // both will return the same result
-echo $formElement->build();
+echo $html;
 echo $formElement;
 ```
 
-## Changelog
-* **v1.1** - 2019-05-05   
-You can now pass an array of $options[] to the constructor when instantiating the HtmlElement class.
+---
+Gets the name of the element.
+```php
+getName(): string
+```
 
-* **v1** - 2019-05-04  
-The library is fully functional and ready to use.
+---
+Sets the name of the element.
+```php
+setName(string $name): self
+```
+
+---
+Gets the options of the element.
+```php
+getOptions(): ?array
+```
+
+---
+Sets the options of the element.
+```php
+setOptions(array $options): self
+```
+
+**Available options :**  
+
+| Name      | Type    | Description                                        |
+|-----------|---------|----------------------------------------------------|
+| autoclose | boolean | Whether the element should have closing tag or not |  
+
+---
+Returns an array of attributes assigned to the element.
+```php
+getAttributes(): ?array
+```
+
+---
+Takes an associative array of attributes.
+```php
+addAttributes(array $attributes): self
+```
+  
+**Example**  
+```php
+addAttributes([
+    'class' => 'is-red',
+    'style' => [
+        'font-size' => '2em'
+    ]
+]);
+```
+You can call this method multiple times, it will internally merge the existing attributes with the new ones.
+And if an attribute already exists, its value will be overwritten.
+
+---
+Returns the content of the element.
+```php
+getContent(): ?string
+```
+
+---
+Sets the content of the element. You can pass a string, an interger, a float or an instance of the HtmlElement class.  
+Thanks to the splat operator (...), you can pass as much argument as you want.
+```php
+setContent(...$content): self
+```  
+
+## Changelog
+* **v2.0** - 2019-12-28
+    * Re-arranged the code
+    * Now requiring PHP 7.2 or above
+    * Removed an unneeded exception and added a new one
+    * Renamed `setAttributes()` to `addAttributes()`
+    * Renamed `build()` to `toHtml()`
+    * Added the ability to set an array as the attribute's value (can be useful for the "style" attribute for example)
+    * Updated the documentation
+    * The name of the element is now automatically trimmed to remove any space around
+    * Fixed the return type for methods that can return a null value
+    * `setContent()` now accepts integer and float values
+
+* **v1.1** - 2019-05-05
+    * You can now pass an array of $options[] to the constructor when instantiating the HtmlElement class.
+
+* **v1.0** - 2019-05-04
+    * The library is fully functional and ready to use.
+
+## TODO
+* Improve support for [global attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes) & [boolean attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes#Boolean_Attributes).
 
 ## Contributing
-If you'd like to contribute, please fork the repository and make changes as you'd like. Pull requests are warmly welcome.
+If you'd like to contribute, please fork the repository and make changes as you'd like. Be sure to follow the same code style & namings used in this library to have a consistent code.
