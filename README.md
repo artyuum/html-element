@@ -229,13 +229,15 @@ setContent(...$content): self
     * Re-arranged the code
     * Now requiring PHP 7.2 or above
     * Removed an unneeded exception and added a new one
-    * Renamed `setAttributes()` to `addAttributes()`
+    * Renamed `setAttributes()` to `addAttributes()` and implemented the ability to merge attributes
     * Renamed `build()` to `toHtml()`
     * Added the ability to set an array as the attribute's value (can be useful for the "style" attribute for example)
     * Updated the documentation
     * The name of the element is now automatically trimmed to remove any space around
     * Fixed the return type for methods that can return a null value
     * `setContent()` now accepts integer and float values
+    * It's no longer required to pass the name of the element in the constructor when instantiating
+    * Added `setName()` & `setOptions()` methods
 
 * **v1.1** - 2019-05-05
     * You can now pass an array of $options[] to the constructor when instantiating the HtmlElement class.
