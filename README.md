@@ -249,4 +249,4 @@ setContent(...$content): self
 * Improve support for [global attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes) & [boolean attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes#Boolean_Attributes).
 
 ## Contributing
-If you'd like to contribute, please fork the repository and make changes as you'd like. Be sure to follow the same code style & namings used in this library to have a consistent code.
+If you'd like to contribute, please fork the repository and make changes as you'd like. Be sure to follow the same coding style & naming used in this library to produce a consistent code.
