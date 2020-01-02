@@ -128,8 +128,8 @@ echo $formElement->toHtml();
 <form action="/login" method="post">
     <div class="form-group">
         <label for="username">Username</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Username" style="border: none; background-color: rgba(100, 100, 255, .1); padding: 10px 15px" required>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Password" style="border: none; background-color: rgba(100, 100, 255, .1); padding: 10px 15px" required>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Username" style="border: none; background-color: rgba(100, 100, 255, .1);" required>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Password" style="border: none; background-color: rgba(100, 100, 255, .1);" required>
         <button type="submit"><span class="fa fa-sign-in-alt">Login</span></button>
     </div>
 </form>
