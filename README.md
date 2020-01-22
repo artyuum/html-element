@@ -227,6 +227,11 @@ setContent(...$content): self
 ## Changelog
 This library uses [semantic versioning](https://semver.org/).
 
+* **v2.0.1** - (2020-01-22)
+    * Simplified buildAttributes() & validateAttributes() methods.
+    * Added proper validation for attribute with an array as value.
+    * Updated tests to be more easy to debug.
+
 * **v2.0** - (2019-12-29)
     * Re-arranged the code.
     * Now requiring PHP 7.2 or above.
@@ -234,7 +239,6 @@ This library uses [semantic versioning](https://semver.org/).
     * Renamed `setAttributes()` to `addAttributes()` and implemented the ability to merge attributes.
     * Renamed `build()` to `toHtml()` (more explicit).
     * Added the ability to set an array as the attribute's value (for the "style" attribute).
-    * Updated the documentation.
     * The name of the element is now automatically trimmed to remove any space around.
     * Fixed the return type for methods that can return a null value.
     * `setContent()` now accepts integer and float values.
