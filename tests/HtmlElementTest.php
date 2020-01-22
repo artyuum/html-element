@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Artyum\HtmlElement\Exceptions\SelfClosingTagException;
+use Artyum\HtmlElement\Exceptions\WrongAttributeValueException;
 use Artyum\HtmlElement\HtmlElement;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -186,5 +187,17 @@ class HtmlElementTest extends TestCase
 
         $element = new HtmlElement('input');
         $element->setContent('test');
+    }
+
+    public function testArrayAsAttributeValueButWithoutAProperName()
+    {
+        $this->expectException(WrongAttributeValueException::class);
+
+        $element = new HtmlElement('input');
+        $element->addAttributes([
+            'not-style' => [
+                'test'
+            ]
+        ]);
     }
 }
