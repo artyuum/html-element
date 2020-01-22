@@ -63,7 +63,7 @@ class HtmlElement
      */
     public function __construct(?string $name = null, ?array $options = null)
     {
-        $this->name = trim($name); // removes any space around
+        $this->name = trim($name);
         $this->options = $options;
     }
 
@@ -109,28 +109,34 @@ class HtmlElement
             foreach ($this->attributes as $name => $value) {
                 $name = trim($name); // removes any space around
 
-                // handles the attribute to generate based on the type of the value
-                switch (gettype($value)) {
-                    case 'boolean':
-                        if ($value === true) { // adds the name of the attribute but without a value (e.g required attribute)
-                            $attributes .= ' ' . $name;
-                        } else {  // adds "off" as value (e.g autocomplete attribute)
-                            $attributes .= ' ' . $name . '="off"';
-                        }
-                        break;
-                    case 'array': // style attribute
-                        $multipleValues = null;
-                        foreach ($value as $propertyName => $propertyValue) {
-                            $multipleValues .= $propertyName . ': ' . $propertyValue . '; ';
-                        }
-                        $attributes .= ' ' . $name . '="' . trim($multipleValues) . '"';
-                        break;
-                    case 'double':
-                    case 'integer':
-                    case 'string':
-                        // adds the name of the attribute along with its value without modifying it
-                        $attributes .= ' ' . $name . '="' . $value . '"';
-                        break;
+                // handles attributes like "required", etc.
+                if (is_bool($value)) {
+                    if ($value === true) { // adds the name of the attribute but without a value (e.g required attribute)
+                        $attributes .= ' ' . $name;
+                    } else {  // adds "off" as value (e.g autocomplete attribute)
+                        $attributes .= ' ' . $name . '="off"';
+                    }
+
+                    // continues to the next iteration to avoid further unneeded checking
+                    continue;
+                }
+
+                // handles "style" attribute
+                if (is_array($value)) {
+                    $multipleValues = null;
+                    foreach ($value as $propertyName => $propertyValue) {
+                        $multipleValues .= $propertyName . ': ' . $propertyValue . '; ';
+                    }
+                    $attributes .= ' ' . $name . '="' . trim($multipleValues) . '"';
+
+                    // continues to the next iteration to avoid further unneeded checking
+                    continue;
+                }
+
+                // handles scalar values
+                if (is_scalar($value)) {
+                    // adds the name of the attribute along with its value without modifying it
+                    $attributes .= ' ' . $name . '="' . $value . '"';
                 }
             }
         }
@@ -173,24 +179,20 @@ class HtmlElement
     {
         // ensures that the attributes has a valid value
         foreach ($attributes as $name => $value) {
-            if (
-                !is_bool($value) &&
-                !is_array($value) &&
-                !is_float($value) &&
-                !is_int($value) &&
-                !is_string($value)
-            ) {
+            if (!is_scalar($value) && !is_array($value)) {
                 throw new WrongAttributeValueException('The following attribute does not have a valid value: ' . $name);
             }
 
-            // validate the content of the array (if the value is an array)
+            // ensures that the attribute that has an array as value has "style" as its name
+            if (is_array($value) && $name !== 'style') {
+                throw new WrongAttributeValueException('The following attribute has an array as value but this is only supported for "style" attribute: ' . $name);
+            }
+
+            // validate the content of the array
             if (is_array($value)) {
                 foreach ($value as $propertyName => $propertyValue) {
                     // ensures that the value of the property is valid
-                    if (
-                        !is_string($propertyValue) &&
-                        !is_int($propertyValue) &&
-                        !is_float($propertyValue)
+                    if (!is_string($propertyValue) && !is_int($propertyValue) && !is_float($propertyValue)
                     ) {
                         throw new WrongAttributeValueException('The following attribute does not have a valid value: ' . $propertyName);
                     }
@@ -217,7 +219,7 @@ class HtmlElement
      */
     public function setName(string $name): self
     {
-        $this->name = trim($name); // removes any space around
+        $this->name = trim($name);
 
         return $this;
     }

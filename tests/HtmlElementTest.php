@@ -16,7 +16,7 @@ class HtmlElementTest extends TestCase
 
         $this->assertEquals(
             '<div></div>',
-            $element
+            $element->toHtml()
         );
     }
 
@@ -26,7 +26,19 @@ class HtmlElementTest extends TestCase
 
         $this->assertEquals(
             '<input>',
-            $element
+            $element->toHtml()
+        );
+    }
+
+    public function testAutocloseOption()
+    {
+        $element = new HtmlElement('div', [
+            'autoclose' => false,
+        ]);
+
+        $this->assertEquals(
+            '<div>',
+            $element->toHtml()
         );
     }
 
@@ -36,10 +48,12 @@ class HtmlElementTest extends TestCase
 
         $this->assertEquals(
             '<div class="test" title="test"></div>',
-            $element->addAttributes([
-                'class' => 'test',
-                'title' => 'test',
-            ])
+            $element
+                ->addAttributes([
+                    'class' => 'test',
+                    'title' => 'test',
+                ])
+                ->toHtml()
         );
     }
 
@@ -49,12 +63,14 @@ class HtmlElementTest extends TestCase
 
         $this->assertEquals(
             '<div style="width: 100px; height: 100px;"></div>',
-            $element->addAttributes([
-                'style' => [
-                    'width'  => '100px',
-                    'height' => '100px',
-                ],
-            ])
+            $element
+                ->addAttributes([
+                    'style' => [
+                        'width'  => '100px',
+                        'height' => '100px',
+                    ],
+                ])
+                ->toHtml()
         );
     }
 
@@ -66,11 +82,12 @@ class HtmlElementTest extends TestCase
             '<input class="test" required>',
             $element
                 ->addAttributes([
-                    'class' => 'test'
+                    'class' => 'test',
                 ])
                 ->addAttributes([
-                    'required' => true
+                    'required' => true,
                 ])
+                ->toHtml()
         );
     }
 
@@ -80,11 +97,13 @@ class HtmlElementTest extends TestCase
 
         $this->assertEquals(
             '<input autocapitalize="off" autocomplete="off" required>',
-            $element->addAttributes([
-                'autocapitalize' => false,
-                'autocomplete'   => false,
-                'required'       => true,
-            ])
+            $element
+                ->addAttributes([
+                    'autocapitalize' => false,
+                    'autocomplete'   => false,
+                    'required'       => true,
+                ])
+                ->toHtml()
         );
     }
 
@@ -94,7 +113,9 @@ class HtmlElementTest extends TestCase
 
         $this->assertEquals(
             '<div>test</div>',
-            $element->setContent('test')
+            $element
+                ->setContent('test')
+                ->toHtml()
         );
     }
 
@@ -107,7 +128,9 @@ class HtmlElementTest extends TestCase
 
         $this->assertEquals(
             '<div><div></div>test11.1</div>',
-            $element->setContent($element, $string, $integer, $float)
+            $element
+                ->setContent($element, $string, $integer, $float)
+                ->toHtml()
         );
     }
 
@@ -121,7 +144,7 @@ class HtmlElementTest extends TestCase
 
         $this->assertEquals(
             '<div><div><div></div></div></div>',
-            $element
+            $element->toHtml()
         );
     }
 
@@ -163,17 +186,5 @@ class HtmlElementTest extends TestCase
 
         $element = new HtmlElement('input');
         $element->setContent('test');
-    }
-
-    public function testAutocloseOption()
-    {
-        $element = new HtmlElement('div', [
-            'autoclose' => false,
-        ]);
-
-        $this->assertEquals(
-            '<div>',
-            $element
-        );
     }
 }
