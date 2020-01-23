@@ -227,12 +227,12 @@ setContent(...$content): self
 ## Changelog
 This library uses [semantic versioning](https://semver.org/).
 
-* **v2.0.1** - (2020-01-22)
+* **2.0.1** - (2020-01-22)
     * Simplified buildAttributes() & validateAttributes() methods.
     * Added proper validation for attribute with an array as value.
-    * Updated tests to be more easy to debug.
+    * Updated tests to be easier to debug.
 
-* **v2.0** - (2019-12-29)
+* **2.0.0** - (2019-12-29)
     * Re-arranged the code.
     * Now requiring PHP 7.2 or above.
     * Removed an unneeded exception and added a new one.
@@ -245,10 +245,10 @@ This library uses [semantic versioning](https://semver.org/).
     * It's no longer required to pass the name of the element in the constructor when instantiating.
     * Added `setName()` & `setOptions()` methods.
 
-* **v1.1** - (2019-05-05)
+* **1.1.0** - (2019-05-05)
     * You can now pass an array of $options[] to the constructor when instantiating the HtmlElement class.
 
-* **v1.0** - (2019-05-04)
+* **1.0.0** - (2019-05-04)
     * The library is fully functional and ready to use.
 
 ## TODO
