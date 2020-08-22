@@ -218,7 +218,7 @@ getContent(): ?string
 ```
 
 ---
-Sets the content of the element. You can pass a string, an interger, a float or an instance of the HtmlElement class.  
+Sets the content of the element. You can pass a string, an integer, a float or an instance of the HtmlElement class.  
 Thanks to the splat operator (...), you can pass as much argument as you want.
 ```php
 setContent(...$content): self
