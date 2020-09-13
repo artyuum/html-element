@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Artyum\HtmlElement\Tests;
 
 use Artyum\HtmlElement\Exceptions\SelfClosingTagException;
 use Artyum\HtmlElement\Exceptions\WrongAttributeValueException;
