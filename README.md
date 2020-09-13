@@ -136,7 +136,7 @@ echo $formElement->toHtml();
 ```
 
 ## API
-When instantiating the HtmlElelement class, you can optionally provide the name of the element as first argument and an array of options as second argument.
+When instantiating the HtmlElement class, you can optionally provide the name of the element as first argument and an array of options as second argument.
 ```php
 __construct(?string $name = null, ?array $options = null)
 ```  
