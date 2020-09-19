@@ -7,13 +7,11 @@ use Artyum\HtmlElement\Exceptions\SelfClosingTagException;
 use Artyum\HtmlElement\Exceptions\WrongAttributeValueException;
 
 /**
- * Class HtmlElement
- *
  * This class gives you the ability to easily create HTML elements and add attributes/content to them.
  *
  * @package Artyum\HtmlElement
  */
-class HtmlElement
+class Element
 {
     /**
      * @var string Should contain the name of the HTML element to create.
@@ -58,7 +56,7 @@ class HtmlElement
     /**
      * HtmlElement constructor.
      *
-     * @param string $name
+     * @param string|null $name
      * @param array|null $options
      */
     public function __construct(?string $name = null, ?array $options = null)
@@ -215,7 +213,7 @@ class HtmlElement
      * Sets the name of the element.
      *
      * @param string $name
-     * @return HtmlElement
+     * @return Element
      */
     public function setName(string $name): self
     {
@@ -238,7 +236,7 @@ class HtmlElement
      * Sets the options.
      *
      * @param array $options
-     * @return HtmlElement
+     * @return Element
      */
     public function setOptions(array $options): self
     {
@@ -292,7 +290,7 @@ class HtmlElement
      * Sets the element content.
      *
      * @param mixed ...$content
-     * @return HtmlElement
+     * @return Element
      * @throws SelfClosingTagException
      * @throws InvalidArgumentException
      */
@@ -310,7 +308,7 @@ class HtmlElement
                 is_float($element)
             ) {
                 $this->content .= $element;
-            } else if ($element instanceof $this) {
+            } elseif ($element instanceof $this) {
                 $this->content .= $element->toHtml();
             } else {
                 throw new InvalidArgumentException('The $content argument must be either a string or an instance of ' . self::class);

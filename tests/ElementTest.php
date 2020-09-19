@@ -1,19 +1,19 @@
 <?php
 
-namespace Artyum\HtmlElement\Tests;
+namespace Tests;
 
 use Artyum\HtmlElement\Exceptions\SelfClosingTagException;
 use Artyum\HtmlElement\Exceptions\WrongAttributeValueException;
-use Artyum\HtmlElement\HtmlElement;
+use Artyum\HtmlElement\Element;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class HtmlElementTest extends TestCase
+class ElementTest extends TestCase
 {
     public function testSimpleElement()
     {
-        $element = new HtmlElement('div');
+        $element = new Element('div');
 
         $this->assertEquals(
             '<div></div>',
@@ -23,7 +23,7 @@ class HtmlElementTest extends TestCase
 
     public function testSelfClosingElement()
     {
-        $element = new HtmlElement('input');
+        $element = new Element('input');
 
         $this->assertEquals(
             '<input>',
@@ -33,7 +33,7 @@ class HtmlElementTest extends TestCase
 
     public function testAutocloseOption()
     {
-        $element = new HtmlElement('div', [
+        $element = new Element('div', [
             'autoclose' => false,
         ]);
 
@@ -45,7 +45,7 @@ class HtmlElementTest extends TestCase
 
     public function testElementWithAttributes()
     {
-        $element = new HtmlElement('div');
+        $element = new Element('div');
 
         $this->assertEquals(
             '<div class="test" title="test"></div>',
@@ -60,7 +60,7 @@ class HtmlElementTest extends TestCase
 
     public function testElementWithArrayAsAttributeValue()
     {
-        $element = new HtmlElement('div');
+        $element = new Element('div');
 
         $this->assertEquals(
             '<div style="width: 100px; height: 100px;"></div>',
@@ -77,7 +77,7 @@ class HtmlElementTest extends TestCase
 
     public function testAttributesMerging()
     {
-        $element = new HtmlElement('input');
+        $element = new Element('input');
 
         $this->assertEquals(
             '<input class="test" required>',
@@ -94,7 +94,7 @@ class HtmlElementTest extends TestCase
 
     public function testBooleanAttributes()
     {
-        $element = new HtmlElement('input');
+        $element = new Element('input');
 
         $this->assertEquals(
             '<input autocapitalize="off" autocomplete="off" required>',
@@ -110,7 +110,7 @@ class HtmlElementTest extends TestCase
 
     public function testSimpleContent()
     {
-        $element = new HtmlElement('div');
+        $element = new Element('div');
 
         $this->assertEquals(
             '<div>test</div>',
@@ -122,7 +122,7 @@ class HtmlElementTest extends TestCase
 
     public function testMultipleContent()
     {
-        $element = new HtmlElement('div');
+        $element = new Element('div');
         $string = 'test';
         $integer = 1;
         $float = 1.1;
@@ -137,10 +137,10 @@ class HtmlElementTest extends TestCase
 
     public function testNestedContent()
     {
-        $element = new HtmlElement('div');
+        $element = new Element('div');
 
         $element->setContent(
-            (new HtmlElement('div'))->setContent(new HtmlElement('div'))
+            (new Element('div'))->setContent(new Element('div'))
         );
 
         $this->assertEquals(
@@ -153,7 +153,7 @@ class HtmlElementTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $element = new HtmlElement('div');
+        $element = new Element('div');
         $element->setContent(true);
     }
 
@@ -161,7 +161,7 @@ class HtmlElementTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $element = new HtmlElement('div');
+        $element = new Element('div');
         $element->setContent(null);
     }
 
@@ -169,7 +169,7 @@ class HtmlElementTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $element = new HtmlElement('div');
+        $element = new Element('div');
         $element->setContent([]);
     }
 
@@ -177,7 +177,7 @@ class HtmlElementTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $element = new HtmlElement('div');
+        $element = new Element('div');
         $element->setContent(new stdClass());
     }
 
@@ -185,7 +185,7 @@ class HtmlElementTest extends TestCase
     {
         $this->expectException(SelfClosingTagException::class);
 
-        $element = new HtmlElement('input');
+        $element = new Element('input');
         $element->setContent('test');
     }
 
@@ -193,7 +193,7 @@ class HtmlElementTest extends TestCase
     {
         $this->expectException(WrongAttributeValueException::class);
 
-        $element = new HtmlElement('input');
+        $element = new Element('input');
         $element->addAttributes([
             'not-style' => [
                 'test'

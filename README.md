@@ -25,7 +25,7 @@ composer require artyuum/html-element
 A simple DIV element with some attributes & a content.
 
 ```php
-$divElement = new Artyum\HtmlElement\HtmlElement('div');
+$divElement = new Artyum\HtmlElement\Element('div');
 
 $divElement
     ->addAttributes([
@@ -54,13 +54,13 @@ echo $divElement->toHtml();
 An example of a login form that contains childrens.
 
 ```php
-$formElement = new Artyum\HtmlElement\HtmlElement('form');
-$divElement = new Artyum\HtmlElement\HtmlElement('div');
-$labelElement = new Artyum\HtmlElement\HtmlElement('label');
-$usernameInputElement = new Artyum\HtmlElement\HtmlElement('input');
-$passwordInputElement = new Artyum\HtmlElement\HtmlElement('input');
-$buttonElement = new Artyum\HtmlElement\HtmlElement('button');
-$spanElement = new Artyum\HtmlElement\HtmlElement('span');
+$formElement = new Artyum\HtmlElement\Element('form');
+$divElement = new Artyum\HtmlElement\Element('div');
+$labelElement = new Artyum\HtmlElement\Element('label');
+$usernameInputElement = new Artyum\HtmlElement\Element('input');
+$passwordInputElement = new Artyum\HtmlElement\Element('input');
+$buttonElement = new Artyum\HtmlElement\Element('button');
+$spanElement = new Artyum\HtmlElement\Element('span');
 
 $formElement
     ->addAttributes([
