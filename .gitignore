@@ -6,3 +6,6 @@ index.php
 # Composer
 vendor/
 composer.lock
+
+# PHPCS
+php_cs.cache

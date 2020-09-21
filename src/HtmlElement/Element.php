@@ -4,12 +4,9 @@ namespace Artyum\HtmlElement;
 
 use InvalidArgumentException;
 use Artyum\HtmlElement\Exceptions\SelfClosingTagException;
-use Artyum\HtmlElement\Exceptions\WrongAttributeValueException;
 
 /**
- * This class gives you the ability to easily create HTML elements and add attributes/content to them.
- *
- * @package Artyum\HtmlElement
+ * Creates an HTML element and adds attributes/content to it.
  */
 class Element
 {
@@ -29,7 +26,7 @@ class Element
     private $content;
 
     /**
-     * @var array Should contain an array of HTML attributes with their values.
+     * @var Attribute[] Should contain an array of Attribute class instances.
      */
     private $attributes;
 
@@ -54,12 +51,10 @@ class Element
     ];
 
     /**
-     * HtmlElement constructor.
-     *
-     * @param string|null $name
+     * @param string $name
      * @param array|null $options
      */
-    public function __construct(?string $name = null, ?array $options = null)
+    public function __construct(string $name, ?array $options = null)
     {
         $this->name = trim($name);
         $this->options = $options;
@@ -76,21 +71,20 @@ class Element
     }
 
     /**
-     * Generates the HTML code.
-     */
-    public function toHtml(): string
-    {
-        return $this->startTag() . $this->content . $this->endTag();
-    }
-
-    /**
      * Gets the element start tag.
      *
      * @return string
      */
     private function startTag(): string
     {
-        return '<' . $this->name . $this->buildAttributes() . '>';
+        $output = '<' . $this->name;
+        $attributes = $this->buildAttributes();
+
+        if ($attributes) {
+            $output .= ' ' . $attributes;
+        }
+
+        return $output . '>';
     }
 
     /**
@@ -100,46 +94,17 @@ class Element
      */
     private function buildAttributes(): ?string
     {
-        $attributes = null;
-
-        // ensures that the attributes have been set
-        if ($this->attributes) {
-            foreach ($this->attributes as $name => $value) {
-                $name = trim($name); // removes any space around
-
-                // handles attributes like "required", etc.
-                if (is_bool($value)) {
-                    if ($value === true) { // adds the name of the attribute but without a value (e.g required attribute)
-                        $attributes .= ' ' . $name;
-                    } else {  // adds "off" as value (e.g autocomplete attribute)
-                        $attributes .= ' ' . $name . '="off"';
-                    }
-
-                    // continues to the next iteration to avoid further unneeded checking
-                    continue;
-                }
-
-                // handles "style" attribute
-                if (is_array($value)) {
-                    $multipleValues = null;
-                    foreach ($value as $propertyName => $propertyValue) {
-                        $multipleValues .= $propertyName . ': ' . $propertyValue . '; ';
-                    }
-                    $attributes .= ' ' . $name . '="' . trim($multipleValues) . '"';
-
-                    // continues to the next iteration to avoid further unneeded checking
-                    continue;
-                }
-
-                // handles scalar values
-                if (is_scalar($value)) {
-                    // adds the name of the attribute along with its value without modifying it
-                    $attributes .= ' ' . $name . '="' . $value . '"';
-                }
-            }
+        if (!$this->attributes) {
+            return null;
         }
 
-        return $attributes;
+        $attributes = null;
+
+        foreach ($this->attributes as $attribute) {
+            $attributes .= $attribute->build() . ' ';
+        }
+
+        return rtrim($attributes);
     }
 
     /**
@@ -150,7 +115,7 @@ class Element
     private function endTag(): ?string
     {
         // ends here if the element should not have a closing tag
-        if ($this->hasSelfClosingTag()) {
+        if ($this->isSelfClosingTag()) {
             return null;
         }
 
@@ -158,45 +123,13 @@ class Element
     }
 
     /**
-     * Checks if the element has a self-closing tag.
+     * Checks if the element is a self-closing tag.
      *
      * @return bool
      */
-    private function hasSelfClosingTag(): bool
+    private function isSelfClosingTag(): bool
     {
-        return in_array($this->name, $this->selfClosingTags) || $this->options['autoclose'] === false;
-    }
-
-    /**
-     * Validates the attributes.
-     *
-     * @param array $attributes
-     * @throws WrongAttributeValueException
-     */
-    private function validateAttributes(array $attributes): void
-    {
-        // ensures that the attributes has a valid value
-        foreach ($attributes as $name => $value) {
-            if (!is_scalar($value) && !is_array($value)) {
-                throw new WrongAttributeValueException('The following attribute does not have a valid value: ' . $name);
-            }
-
-            // ensures that the attribute that has an array as value has "style" as its name
-            if (is_array($value) && $name !== 'style') {
-                throw new WrongAttributeValueException('The following attribute has an array as value but this is only supported for "style" attribute: ' . $name);
-            }
-
-            // validate the content of the array
-            if (is_array($value)) {
-                foreach ($value as $propertyName => $propertyValue) {
-                    // ensures that the value of the property is valid
-                    if (!is_string($propertyValue) && !is_int($propertyValue) && !is_float($propertyValue)
-                    ) {
-                        throw new WrongAttributeValueException('The following attribute does not have a valid value: ' . $propertyName);
-                    }
-                }
-            }
-        }
+        return in_array($this->name, $this->selfClosingTags) || (isset($this->options['autoclose']) && $this->options['autoclose'] === false);
     }
 
     /**
@@ -207,19 +140,6 @@ class Element
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * Sets the name of the element.
-     *
-     * @param string $name
-     * @return Element
-     */
-    public function setName(string $name): self
-    {
-        $this->name = trim($name);
-
-        return $this;
     }
 
     /**
@@ -248,7 +168,7 @@ class Element
     /**
      * Get an array of attributes assigned to the element.
      *
-     * @return array|null
+     * @return Attribute[]|null
      */
     public function getAttributes(): ?array
     {
@@ -258,20 +178,19 @@ class Element
     /**
      * Adds attributes to the element.
      *
-     * @param array $attributes
+     * @param Attribute ...$attributes
      * @return $this
-     * @throws WrongAttributeValueException
      */
-    public function addAttributes(array $attributes): self
+    public function addAttributes(...$attributes): self
     {
-        // ensures that the attributes value is valid
-        $this->validateAttributes($attributes);
-
-        if ($this->attributes) {
-            $this->attributes = array_merge($this->attributes, $attributes);
-        } else {
-            $this->attributes = $attributes;
+        // loops through all passed $attributes and validates that instances of Attribute only have been passed
+        foreach ($attributes as $attribute) {
+            if (!$attribute instanceof Attribute) {
+                throw new InvalidArgumentException('The "$attributes" argument must only contain instance(s) of ' . Attribute::class);
+            }
         }
+
+        $this->attributes = array_merge($this->attributes ?? [], $attributes);
 
         return $this;
     }
@@ -287,34 +206,39 @@ class Element
     }
 
     /**
-     * Sets the element content.
+     * Adds content to the element.
      *
-     * @param mixed ...$content
+     * @param int|float|string|bool|self ...$content
      * @return Element
      * @throws SelfClosingTagException
      * @throws InvalidArgumentException
      */
-    public function setContent(...$content): self
+    public function addContent(...$content): self
     {
         // ensures that we are not adding a content to a self-closing element/tag.
-        if ($this->hasSelfClosingTag()) {
+        if ($this->isSelfClosingTag()) {
             throw new SelfClosingTagException('A self-closing tag cannot have a content.');
         }
 
+        // loops through all passed $content and validates their type before appending them to the existing element's content
         foreach ($content as $element) {
-            if (
-                is_string($element) ||
-                is_int($element) ||
-                is_float($element)
-            ) {
+            if (is_scalar($element)) {
                 $this->content .= $element;
             } elseif ($element instanceof $this) {
                 $this->content .= $element->toHtml();
             } else {
-                throw new InvalidArgumentException('The $content argument must be either a string or an instance of ' . self::class);
+                throw new InvalidArgumentException('The "$content" argument must contain scalar value(s) or instance(s) of ' . self::class);
             }
         }
 
         return $this;
+    }
+
+    /**
+     * Outputs the HTML code.
+     */
+    public function toHtml(): string
+    {
+        return $this->startTag() . $this->content . $this->endTag();
     }
 }
