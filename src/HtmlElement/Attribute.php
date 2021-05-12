@@ -26,9 +26,7 @@ class Attribute
     private string $separator;
 
     /**
-     * @param string|null $name
      * @param mixed $value
-     * @param string $separator
      */
     public function __construct(?string $name = null, $value = null, string $separator = ';')
     {
@@ -86,10 +84,6 @@ class Attribute
 
     /**
      * Sets the name.
-     *
-     * @param string $name
-     *
-     * @return self
      */
     public function setName(string $name): self
     {
@@ -112,7 +106,6 @@ class Attribute
      * Sets the value.
      *
      * @param mixed $value
-     * @return self
      */
     public function setValue($value): self
     {
@@ -125,8 +118,6 @@ class Attribute
 
     /**
      * Gets the separator.
-     *
-     * @return string
      */
     public function getSeparator(): string
     {
@@ -135,9 +126,6 @@ class Attribute
 
     /**
      * Sets the attribute values separator.
-     *
-     * @param string $separator
-     * @return self
      */
     public function setSeparator(string $separator): self
     {
@@ -148,8 +136,6 @@ class Attribute
 
     /**
      * Builds & returns the HTML representation of the attribute.
-     *
-     * @return string
      */
     public function build(): string
     {

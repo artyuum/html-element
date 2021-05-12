@@ -2,8 +2,8 @@
 
 namespace Artyum\HtmlElement;
 
-use InvalidArgumentException;
 use Artyum\HtmlElement\Exceptions\SelfClosingTagException;
+use InvalidArgumentException;
 use LogicException;
 
 /**
@@ -12,27 +12,27 @@ use LogicException;
 class Element
 {
     /**
-     * @var string Should contain the name of the HTML element to create.
+     * @var string should contain the name of the HTML element to create
      */
     private ?string $name = null;
 
     /**
-     * @var array|null Should contain an array of options.
+     * @var array|null should contain an array of options
      */
     private ?array $options;
 
     /**
-     * @var string|null Should contain the content of the element.
+     * @var string|null should contain the content of the element
      */
     private ?string $content = null;
 
     /**
-     * @var Attribute[] Should contain an array of Attribute class instances.
+     * @var Attribute[] should contain an array of Attribute class instances
      */
     private array $attributes = [];
 
     /**
-     * @var array Should contain an array of self-closing HTML tags.
+     * @var array should contain an array of self-closing HTML tags
      */
     private $selfClosingTags = [
         'area',
@@ -51,10 +51,6 @@ class Element
         'wbr',
     ];
 
-    /**
-     * @param string|null $name
-     * @param array|null $options
-     */
     public function __construct(?string $name = null, ?array $options = null)
     {
         // prevents transforming $name into an empty string if not set
@@ -67,8 +63,6 @@ class Element
 
     /**
      * Gets the generated HTML.
-     *
-     * @return string
      */
     public function __toString(): string
     {
@@ -77,8 +71,6 @@ class Element
 
     /**
      * Gets the element start tag.
-     *
-     * @return string
      */
     private function startTag(): string
     {
@@ -94,8 +86,6 @@ class Element
 
     /**
      * Builds the element's attributes.
-     *
-     * @return string|null
      */
     private function buildAttributes(): ?string
     {
@@ -114,8 +104,6 @@ class Element
 
     /**
      * Gets the element end tag.
-     *
-     * @return string
      */
     private function endTag(): ?string
     {
@@ -129,8 +117,6 @@ class Element
 
     /**
      * Checks if the element is a self-closing tag.
-     *
-     * @return bool
      */
     private function isSelfClosingTag(): bool
     {
@@ -139,8 +125,6 @@ class Element
 
     /**
      * Gets the name of the element.
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -149,8 +133,6 @@ class Element
 
     /**
      * Sets the name of the element.
-     *
-     * @return self
      */
     public function setName(string $name): self
     {
@@ -161,8 +143,6 @@ class Element
 
     /**
      * Gets the options.
-     *
-     * @return array|null
      */
     public function getOptions(): ?array
     {
@@ -171,9 +151,6 @@ class Element
 
     /**
      * Sets the options.
-     *
-     * @param array $options
-     * @return self
      */
     public function setOptions(array $options): self
     {
@@ -196,7 +173,6 @@ class Element
      * Adds attributes to the element.
      *
      * @param Attribute ...$attributes
-     * @return $this
      */
     public function addAttributes(...$attributes): self
     {
@@ -214,8 +190,6 @@ class Element
 
     /**
      * Gets the element content.
-     *
-     * @return string|null
      */
     public function getContent(): ?string
     {
@@ -226,7 +200,7 @@ class Element
      * Adds content to the element.
      *
      * @param int|float|string|bool|self ...$content
-     * @return self
+     *
      * @throws SelfClosingTagException
      * @throws InvalidArgumentException
      */

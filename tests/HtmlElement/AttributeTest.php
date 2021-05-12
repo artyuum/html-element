@@ -3,7 +3,6 @@
 namespace Tests\HtmlElement;
 
 use Artyum\HtmlElement\Attribute;
-use Artyum\HtmlElement\Element;
 use InvalidArgumentException;
 use LogicException;
 use PHPUnit\Framework\TestCase;
@@ -67,7 +66,7 @@ class AttributeTest extends TestCase
     {
         $attribute = new Attribute('test', [
             'first',
-            'second'
+            'second',
         ]);
 
         $this->assertEquals(
@@ -83,7 +82,7 @@ class AttributeTest extends TestCase
     {
         $attribute = new Attribute('test', [
             'first',
-            'second'
+            'second',
         ], ' ');
 
         $this->assertEquals(

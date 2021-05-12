@@ -9,7 +9,12 @@ return PhpCsFixer\Config::create()
     ->setCacheFile(__DIR__ . '/php_cs.cache')
     ->setRiskyAllowed(true)
     ->setRules([
-        '@PSR2'                                  => true,
+        '@Symfony'                               => true,
+        'yoda_style'                             => [
+            'equal'            => false,
+            'identical'        => false,
+            'less_and_greater' => false,
+        ],
         'array_indentation'                      => true,
         'method_chaining_indentation'            => true,
         'no_useless_else'                        => true,
@@ -29,4 +34,5 @@ return PhpCsFixer\Config::create()
     ->setIndent(str_pad('', 4))
     ->setFinder(
         $finder
-    );
+    )
+;

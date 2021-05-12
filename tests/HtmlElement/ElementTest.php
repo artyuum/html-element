@@ -3,8 +3,8 @@
 namespace Tests\HtmlElement;
 
 use Artyum\HtmlElement\Attribute;
-use Artyum\HtmlElement\Exceptions\SelfClosingTagException;
 use Artyum\HtmlElement\Element;
+use Artyum\HtmlElement\Exceptions\SelfClosingTagException;
 use InvalidArgumentException;
 use LogicException;
 use PHPUnit\Framework\TestCase;
@@ -68,7 +68,7 @@ class ElementTest extends TestCase
                     new Attribute('title', 'test'),
                     new Attribute('style', [
                         'width: 100px',
-                        'height: 100px'
+                        'height: 100px',
                     ])
                 )
                 ->toHtml()
