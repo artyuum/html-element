@@ -6,6 +6,7 @@ use Artyum\HtmlElement\Attribute;
 use Artyum\HtmlElement\Exceptions\SelfClosingTagException;
 use Artyum\HtmlElement\Element;
 use InvalidArgumentException;
+use LogicException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -169,5 +170,16 @@ class ElementTest extends TestCase
 
         $element = new Element('input');
         $element->addContent('test');
+    }
+
+    /**
+     * Tests that an exception is thrown when trying to get the HTML of an element without setting the name.
+     */
+    public function testElementWithoutName()
+    {
+        $this->expectException(LogicException::class);
+
+        $element = new Element();
+        $element->toHtml();
     }
 }
