@@ -12,7 +12,7 @@ class Attribute
     /**
      * @var string should contain the attribute name
      */
-    private $name;
+    private string $name;
 
     /**
      * @var mixed should contain the attribute value
@@ -22,7 +22,7 @@ class Attribute
     /**
      * @var string should contain the value separator (used when the value is an array)
      */
-    private $separator;
+    private string $separator;
 
     /**
      * @param string $name
