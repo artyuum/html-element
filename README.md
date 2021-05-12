@@ -148,7 +148,7 @@ Gets the HTML code of the element.
 ```php
 toHtml(): string
 ```  
-If you call this method without setting the name of the element first, a `LogicException` will be thrown.
+If you call this method without setting the name property first, a `LogicException` will be thrown.
 
 Note that you can also simply `echo` the instance and it will internally call the `toHtml()` method. This is possible thanks to the `__toString()` magic method.  
 
@@ -227,9 +227,21 @@ getName(): ?string
 ```
 
 ---
+Sets the name.
+```php
+setName(string $name): self
+```
+
+---
 Gets the value.
 ```php
 getValue(): mixed
+```
+
+---
+Sets the value.
+```php
+setValue(mixed $value): self
 ```
 
 ---
@@ -249,6 +261,8 @@ Builds & returns the HTML representation of the attribute.
 ```php
 build(): string
 ```
+If you call this method without setting the name or the value property first, a `LogicException` will be thrown.
+
 You can also `echo` the instance and it will internally call the `build()` method.
 
 
