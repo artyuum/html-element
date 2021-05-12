@@ -10,9 +10,9 @@ use InvalidArgumentException;
 class Attribute
 {
     /**
-     * @var string should contain the attribute name
+     * @var string|null should contain the attribute name
      */
-    private string $name;
+    private ?string $name = null;
 
     /**
      * @var mixed should contain the attribute value
@@ -25,15 +25,19 @@ class Attribute
     private string $separator;
 
     /**
-     * @param string $name
-     * @param $value
+     * @param string|null $name
+     * @param mixed $value
      * @param string $separator
      */
-    public function __construct(string $name, $value, string $separator = ';')
+    public function __construct(?string $name = null, $value = null, string $separator = ';')
     {
         $this->validateValue($value);
 
-        $this->name = trim($name);
+        // prevents transforming $name into an empty string if not set
+        if (!empty($name)) {
+            $this->name = trim($name);
+        }
+
         $this->value = $value;
         $this->separator = $separator;
     }
@@ -46,10 +50,14 @@ class Attribute
     /**
      * Validates the attribute value.
      *
-     * @param $value
+     * @param mixed $value
      */
     private function validateValue($value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         // ensures that the value is scalar or an array
         if (!is_scalar($value) && !is_array($value)) {
             throw new InvalidArgumentException('The passed attribute value type is not valid. You passed: ' . gettype($value));
