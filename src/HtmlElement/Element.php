@@ -172,7 +172,7 @@ class Element
      * Sets the options.
      *
      * @param array $options
-     * @return Element
+     * @return self
      */
     public function setOptions(array $options): self
     {
@@ -225,7 +225,7 @@ class Element
      * Adds content to the element.
      *
      * @param int|float|string|bool|self ...$content
-     * @return Element
+     * @return self
      * @throws SelfClosingTagException
      * @throws InvalidArgumentException
      */
