@@ -147,6 +147,18 @@ class Element
     }
 
     /**
+     * Sets the name of the element.
+     *
+     * @return self
+     */
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
      * Gets the options.
      *
      * @return array|null
