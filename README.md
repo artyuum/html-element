@@ -140,7 +140,7 @@ echo $formElement->toHtml();
 ### Artyum\HtmlElement\Element
 When instantiating the `Element` class, you can optionally provide the name of the element as first argument, and an array of options as second argument.
 ```php
-__construct(string $name, ?array $options = null)
+__construct(?string $name = null, ?array $options = null)
 ```  
 
 ---
@@ -148,6 +148,8 @@ Gets the HTML code of the element.
 ```php
 toHtml(): string
 ```  
+If you call this method without setting the name of the element first, a `LogicException` will be thrown.
+
 Note that you can also simply `echo` the instance and it will internally call the `toHtml()` method. This is possible thanks to the `__toString()` magic method.  
 
 **Example**  
@@ -160,7 +162,13 @@ echo $element;
 ---
 Gets the name of the element.
 ```php
-getName(): string
+getName(): ?string
+```
+
+---
+Sets the name of the element.
+```php
+setName(string $name): self
 ```
 
 ---
@@ -190,7 +198,7 @@ getAttributes(): Attribute[]
 ---
 Adds one or multiple attributes to the element.
 ```php
-addAttributes(... Attribute $attribute);
+addAttributes(... Attribute $attribute): self
 ```  
 Thanks to the splat operator (...), you can pass as much argument as you want. You can also call this method multiple times to add additional attributes.
 
@@ -209,13 +217,13 @@ addContent(...$content): self
 ### Artyum\HtmlElement\Attribute
 When instantiating the `Attribute` class, you must provide the name of the attribute and its value. You can optinally pass the separator that will be used to separate the values if you pass an array of values. 
 ```php
-__construct(string $name, mixed $value, string $separator = ';')
+__construct(?string $name = null, mixed $value = null, string $separator = ';')
 ```  
 
 ---
 Gets the name.
 ```php
-getName(): string
+getName(): ?string
 ```
 
 ---
@@ -233,7 +241,7 @@ getSeparator(): string
 ---
 Sets the attribute values separator.
 ```php
-setSeparator(string $separator): Attribute
+setSeparator(string $separator): self
 ```
 
 ---
