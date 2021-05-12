@@ -13,22 +13,22 @@ class Element
     /**
      * @var string Should contain the name of the HTML element to create.
      */
-    private $name;
+    private ?string $name = null;
 
     /**
-     * @var array Should contain an array of options.
+     * @var array|null Should contain an array of options.
      */
-    private $options;
+    private ?array $options;
 
     /**
-     * @var string Should contain the content of the element.
+     * @var string|null Should contain the content of the element.
      */
-    private $content;
+    private ?string $content = null;
 
     /**
      * @var Attribute[] Should contain an array of Attribute class instances.
      */
-    private $attributes;
+    private array $attributes = [];
 
     /**
      * @var array Should contain an array of self-closing HTML tags.
