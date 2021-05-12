@@ -25,7 +25,10 @@ composer require artyuum/html-element
 A simple DIV element with some attributes & a content.
 
 ```php
-$divElement = new Artyum\HtmlElement\Element('div');
+use Artyum\HtmlElement\Element;
+use Artyum\HtmlElement\Attribute;
+
+$divElement = new Element('div');
 
 $divElement
     ->addAttributes(
@@ -56,13 +59,16 @@ echo $divElement->toHtml();
 An example of a login form that contains children.
 
 ```php
-$formElement = new Artyum\HtmlElement\Element('form');
-$divElement = new Artyum\HtmlElement\Element('div');
-$labelElement = new Artyum\HtmlElement\Element('label');
-$usernameInputElement = new Artyum\HtmlElement\Element('input');
-$passwordInputElement = new Artyum\HtmlElement\Element('input');
-$buttonElement = new Artyum\HtmlElement\Element('button');
-$spanElement = new Artyum\HtmlElement\Element('span');
+use Artyum\HtmlElement\Element;
+use Artyum\HtmlElement\Attribute;
+
+$formElement = new Element('form');
+$divElement = new Element('div');
+$labelElement = new Element('label');
+$usernameInputElement = new Element('input');
+$passwordInputElement = new Element('input');
+$buttonElement = new Element('button');
+$spanElement = new Element('span');
 
 $formElement
     ->addAttributes(
@@ -132,7 +138,7 @@ echo $formElement->toHtml();
 ## API
 
 ### Artyum\HtmlElement\Element
-When instantiating the Element class, you must provide the name of the element as first argument and optionally an array of options as second argument.
+When instantiating the `Element` class, you can optionally provide the name of the element as first argument, and an array of options as second argument.
 ```php
 __construct(string $name, ?array $options = null)
 ```  
@@ -201,7 +207,7 @@ addContent(...$content): self
 ```  
 
 ### Artyum\HtmlElement\Attribute
-When instantiating the Attribute class, you must provide the name of the attribute and its value. You can optinally pass the separator that will be used to separate the values if you pass an array of values. 
+When instantiating the `Attribute` class, you must provide the name of the attribute and its value. You can optinally pass the separator that will be used to separate the values if you pass an array of values. 
 ```php
 __construct(string $name, mixed $value, string $separator = ';')
 ```  
