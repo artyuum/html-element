@@ -5,6 +5,7 @@ namespace Tests\HtmlElement;
 use Artyum\HtmlElement\Attribute;
 use Artyum\HtmlElement\Element;
 use InvalidArgumentException;
+use LogicException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -89,5 +90,27 @@ class AttributeTest extends TestCase
             'test="first second"',
             $attribute->build()
         );
+    }
+
+    /**
+     * Tests that an exception is thrown when trying to get build an attribute without setting the name.
+     */
+    public function testBuildAttributeWithoutName()
+    {
+        $this->expectException(LogicException::class);
+
+        $attribute = new Attribute();
+        $attribute->build();
+    }
+
+    /**
+     * Tests that an exception is thrown when trying to get build an attribute without setting the value.
+     */
+    public function testBuildAttributeWithoutValue()
+    {
+        $this->expectException(LogicException::class);
+
+        $attribute = new Attribute('test');
+        $attribute->build();
     }
 }
