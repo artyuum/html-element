@@ -4,6 +4,7 @@ namespace Artyum\HtmlElement;
 
 use InvalidArgumentException;
 use Artyum\HtmlElement\Exceptions\SelfClosingTagException;
+use LogicException;
 
 /**
  * Creates an HTML element and adds attributes/content to it.
@@ -255,6 +256,10 @@ class Element
      */
     public function toHtml(): string
     {
+        if ($this->name === null) {
+            throw new LogicException('The "$name" property must be set.');
+        }
+
         return $this->startTag() . $this->content . $this->endTag();
     }
 }
