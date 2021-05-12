@@ -79,7 +79,7 @@ class Attribute
      *
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -137,9 +137,9 @@ class Attribute
      * Sets the attribute values separator.
      *
      * @param string $separator
-     * @return Attribute
+     * @return self
      */
-    public function setSeparator(string $separator): Attribute
+    public function setSeparator(string $separator): self
     {
         $this->separator = $separator;
 
@@ -166,7 +166,9 @@ class Attribute
             // returns the name but without the value if the value is "true"
             if ($this->value === true) {
                 return $this->name;
-            }    // otherwise, adds "off" as value (e.g autocomplete attribute)
+            }
+
+            // otherwise, adds "off" as value (e.g autocomplete attribute)
             return $this->name . '="off"';
         }
 
