@@ -255,6 +255,15 @@ You can also `echo` the instance and it will internally call the `build()` metho
 ## Changelog
 This library follows [semantic versioning](https://semver.org/).
 
+* **4.0.0** - (2021-05-13)
+  * Set Attribute class constructor arguments as optional
+  * Added the name and value setter in Attribute
+  * Now throwing an exception if the name or the value is not set when calling build() on Attribute
+  * Set Element class constructor arguments as optional
+  * Added name setter in Element
+  * Now throwing an exception if the name is not set when calling toHtml() on Element
+  * **Now compatible with PHP 8**
+
 * **3.0.0** - (2020-09-21)
     * Renamed HtmlElement to Element.
     * Added a new Attribute class.
