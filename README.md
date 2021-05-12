@@ -12,7 +12,7 @@ There are few existing libraries on Packagist that have the same purpose but I w
 * Supports boolean attributes. (e.g required attribute)
 
 ## Requirements
-* PHP 7.2 or above
+* PHP ^7.4 or PHP ^8.0
 * Composer
 
 ## Installation
