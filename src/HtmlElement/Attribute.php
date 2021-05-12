@@ -84,6 +84,20 @@ class Attribute
     }
 
     /**
+     * Sets the name.
+     *
+     * @param string $name
+     *
+     * @return self
+     */
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
      * Gets the value.
      *
      * @return mixed
@@ -91,6 +105,21 @@ class Attribute
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * Sets the value.
+     *
+     * @param mixed $value
+     * @return self
+     */
+    public function setValue($value): self
+    {
+        $this->validateValue($value);
+
+        $this->value = $value;
+
+        return $this;
     }
 
     /**
