@@ -3,6 +3,7 @@
 namespace Artyum\HtmlElement;
 
 use InvalidArgumentException;
+use LogicException;
 
 /**
  * Creates an element attribute.
@@ -152,6 +153,14 @@ class Attribute
      */
     public function build(): string
     {
+        if ($this->name === null) {
+            throw new LogicException('The "$name" property must be set.');
+        }
+
+        if ($this->value === null) {
+            throw new LogicException('The "$value" property must be set.');
+        }
+
         // handles boolean attributes (e.g "required", "readonly", etc.)
         if (is_bool($this->value)) {
             // returns the name but without the value if the value is "true"
