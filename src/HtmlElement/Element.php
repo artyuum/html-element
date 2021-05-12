@@ -51,12 +51,16 @@ class Element
     ];
 
     /**
-     * @param string $name
+     * @param string|null $name
      * @param array|null $options
      */
-    public function __construct(string $name, ?array $options = null)
+    public function __construct(?string $name = null, ?array $options = null)
     {
-        $this->name = trim($name);
+        // prevents transforming $name into an empty string if not set
+        if (!empty($name)) {
+            $this->name = trim($name);
+        }
+
         $this->options = $options;
     }
 
